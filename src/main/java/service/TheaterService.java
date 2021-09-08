@@ -18,9 +18,21 @@ public class TheaterService extends AbsDAO {
 
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    public ArrayList<Theater> getListTheater() {
+    @Path("/geojson")
+    public GeoJSON getGeoJSON() {
+        GeoJSON geoJson = new GeoJSON();
+        geoJson.setType("FeatureCollection");
+        geoJson.setFeatures(new ArrayList<>());
         FindIterable<Theater> list = new TheaterDAO().getListTheater();
-        return list.into(new ArrayList<>());
+        list.forEach(theater -> {
+            Feature feature = new Feature();
+            feature.setType("Feature");
+            feature.setGeometry(theater.getLocation().getGeo());
+            feature.setProperties(new Properties());
+            feature.getProperties().setAddress(theater.getLocation().getAddress().getStreet1() + ", " + theater.getLocation().getAddress().getCity());
+            geoJson.getFeatures().add(feature);
+        });
+        return geoJson;
     }
 }
 
