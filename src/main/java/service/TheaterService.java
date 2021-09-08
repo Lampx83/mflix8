@@ -3,6 +3,8 @@ package service;
 import DAO.MongoDB.AbsDAO;
 import DAO.MongoDB.TheaterDAO;
 import com.mongodb.client.FindIterable;
+import lombok.Data;
+import model.Geo;
 import model.Theater;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -22,4 +24,20 @@ public class TheaterService extends AbsDAO {
     }
 }
 
+@Data
+class GeoJSON {
+    private String type;
+    private ArrayList<Feature> features;
+}
+
+@Data
+class Feature {
+    private String type;
+    private Geo geometry;
+    private Properties properties;
+}
+@Data
+class Properties {
+    private String address;
+}
 
